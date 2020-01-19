@@ -13,6 +13,7 @@ https://ru.wix.com/website-template/view/html/1799?siteId=ed9bc57d-3c17-4825-a00
 
 
 #settings.py
+
 """
 Django settings for CandyCocs project.
 
