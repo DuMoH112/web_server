@@ -2,39 +2,41 @@ version: '3'
 services:
   db:
     image: postgres:11.5-alpine
-     ports:
+    ports:
       - '5432:5432'
-     environment:
-       POSTGRES_PASSWORD: changeme
-       POSTGRES_DB: candydb
-       POSTGRES_USER: candy
+    environment:
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: candydb
+      POSTGRES_USER: candy
 
 
   backend:
-    build:
-      context: .
-      dockerfile: ./docker/backend/Dockerfile
+    build: ./backend
     environment:
       - APP_ENV=dev
     depends_on:
-     - db
-    ports:
-      - "40001:40001"
+      - db
     volumes:
-     - .:/code
+      - ./backend:/app/backend
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    command: python3 manage.py runserver 0.0.0.0:8000
 
 
   frontend:
-    build:
-      context: .
-      dockerfile: ./docker/frontend/Dockerfile
+    build: ./frontend
     environment:
       - APP_ENV=dev
-      - APP_BACKEND_URL=backend:40001
-      - APP_FRONTEND_PORT=40002
-    depends_on:
-      - backend
-    ports:
-      - "40002:40002"
     volumes:
-      - ./frontend:/app/src
+      - ./frontend:/app/frontend
+      # One-way volume to use node_modules from inside image
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    # depends_on:
+    #   - backend
+    command: npm start

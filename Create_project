@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo ""
+
+sudo docker-compose up -d
+
+echo "Docker stop"
+sudo docker stop $(sudo docker ps -aq)
+
+echo "Docker remove"
+sudo docker rm $(sudo docker ps -aq)
+
+sudo docker run -v $PWD/backend:/app/backend web_server_backend:latest django-admin startproject $@ .
+
+sudo docker run -v $PWD/frontend:/app/frontend web_server_frontend:latest npx create-react-app $@ .
+sudo mv frontend/$@/* frontend/$@/.gitignore frontend/ && rmdir frontend/$@
+
+docker run -v $PWD/frontend:/app -p 3000:3000 frontend:latest npm start
+
+echo "Docker start"
+sudo docker-compose up
