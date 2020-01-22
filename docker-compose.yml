@@ -27,8 +27,6 @@ services:
 
   frontend:
     build: ./frontend
-    environment:
-      - APP_ENV=dev
     volumes:
       - ./frontend:/app/frontend
       # One-way volume to use node_modules from inside image
@@ -37,6 +35,6 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-    # depends_on:
-    #   - backend
+    depends_on:
+      - backend
     command: npm start
