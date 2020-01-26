@@ -109,6 +109,7 @@ chown -R user:user /home/user/$temp/
 
 echo "Django migrate project"
 sudo docker-compose run --rm backend python manage.py migrate
+sudo docker-compose run --rm backend python createsuperuser
 
 echo "Docker-compose stop"
 sudo docker-compose stop
