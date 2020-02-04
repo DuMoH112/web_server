@@ -105,7 +105,7 @@ export default App;" > frontend/src/App.js
 
 
 temp=`pwd|tr / "\n"|tail -1|head -1`
-chown -R user:user /home/user/$temp/
+sudo chown -R user:user /home/user/$temp/
 
 echo "Django migrate project"
 sudo docker-compose run --rm backend python manage.py migrate
